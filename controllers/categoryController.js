@@ -7,15 +7,15 @@ exports.testFunction = (req, res) => {
 //add category
 exports.categoryPost = async (req, res) => {
   try {
-    const data = req.body; // assuming req body contains category data
+    const { category_name } = req.body; // assuming req body contains category data
 
     // Check if the category already exists
     const existingCategory = await Category.findOne({
-      category_name: data.category_name,
+      category_name,
     });
 
     if (existingCategory) {
-      return res.status(400).json({ message: "Category already in database" });
+      return res.status(400).json({ error: "Category must be unique" });
     }
 
     // Create a new Category document using mongoose schema
@@ -23,11 +23,8 @@ exports.categoryPost = async (req, res) => {
 
     // Save the new category to the database
     const response = await newCategory.save();
-    console.log("Category Data Saved");
-
     res.status(200).json(response);
   } catch (err) {
-    console.error("Internal Server Error", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -40,7 +37,6 @@ exports.categoryGet = async (req, res) => {
     console.log("Data retrieved");
     res.status(200).json(response);
   } catch (err) {
-    console.log("Internal Server Error", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -51,10 +47,8 @@ exports.categoryGetSingle = async (req, res) => {
   try {
     const categoryId = req.params.id;
     const response = await Category.findById(categoryId);
-    console.log("Data retrieved");
     res.status(200).json(response);
   } catch (err) {
-    console.log("Internal Server Error", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

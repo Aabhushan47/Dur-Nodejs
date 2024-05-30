@@ -11,26 +11,41 @@ const {
   categoryGetSingle,
 } = require("../controllers/categoryController");
 const { categoryValidation, validation } = require("../validation/validator");
+const { requireSignin, requireAdmin } = require("../middlewares/auth");
 
 //get method for test
 router.get("/", testFunction);
 
 //Post method for category
 
-router.post("/category", categoryValidation, validation, categoryPost);
+router.post(
+  "/category",
+  categoryValidation,
+  validation,
+  requireSignin,
+  requireAdmin,
+  categoryPost
+);
 
 //get method for category and detail of single category
 
-router.get("/category", categoryGet);
+router.get("/category", requireSignin, requireAdmin, categoryGet);
 
-router.get("/category/:id", categoryGetSingle);
+router.get("/category/:id", requireSignin, requireAdmin, categoryGetSingle);
 
 //update Category
 
-router.put("/category/:id", categoryValidation, validation, categoryUpdate);
+router.put(
+  "/category/:id",
+  categoryValidation,
+  validation,
+  requireSignin,
+  requireAdmin,
+  categoryUpdate
+);
 
 //delete category
 
-router.delete("/category/:id", categoryDelete);
+router.delete("/category/:id", requireSignin, requireAdmin, categoryDelete);
 
 module.exports = router;

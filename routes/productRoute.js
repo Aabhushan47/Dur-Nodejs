@@ -9,6 +9,7 @@ const {
   productDelete,
 } = require("../controllers/productController");
 const { productValidation, validation } = require("../validation/validator");
+const { requireSignin, requireAdmin } = require("../middlewares/auth");
 const router = express.Router();
 
 router.post(
@@ -16,6 +17,7 @@ router.post(
   upload.single("image"),
   productValidation,
   validation,
+  requireSignin,
   productPost
 );
 router.get("/product", productGet);
@@ -25,8 +27,10 @@ router.put(
   upload.single("image"),
   productValidation,
   validation,
+  requireSignin,
+  requireAdmin,
   productUpdate
 );
-router.delete("/product/:id", productDelete);
+router.delete("/product/:id", requireSignin, requireAdmin, productDelete);
 
 module.exports = router;

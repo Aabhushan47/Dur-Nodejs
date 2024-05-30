@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-exports.sendEmail = ({ to, from, subject, text }) => {
+exports.sendEmail = ({ to, from, subject, text, html }) => {
   const transport = nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",
     port: 2525,
@@ -14,6 +14,7 @@ exports.sendEmail = ({ to, from, subject, text }) => {
     from,
     subject,
     text,
+    html,
   };
   transport.sendMail(mailOptions);
 };

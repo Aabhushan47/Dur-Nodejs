@@ -29,6 +29,32 @@ exports.productValidation = [
     .withMessage("sales must be in number"),
 ];
 
+exports.registerValidation = [
+  check("name", "name is required")
+    .notEmpty()
+    .trim()
+    .isLength({ min: 4 })
+    .withMessage("name must be at least 4 charac"),
+  check("email", "email is required")
+    .notEmpty()
+    .trim()
+    .isEmail()
+    .withMessage("email must be in correct format"),
+];
+
+exports.passwordValidation = [
+  check("password", "password is required")
+    .notEmpty()
+    .matches(/[a-z]/)
+    .withMessage("one lowercase")
+    .matches(/[A-Z]/)
+    .withMessage("one uppercase")
+    .matches(/[0-9]/)
+    .withMessage("one number")
+    .isLength({ min: 8 })
+    .withMessage("password must be of min 8"),
+];
+
 exports.validation = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
